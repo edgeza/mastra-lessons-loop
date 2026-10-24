@@ -1,0 +1,32 @@
+{
+  "name": "mastra-lessons-loop",
+  "version": "0.1.0",
+  "description": "A Mastra agent that improves from feedback via reviewed, capped lessons in memory. No fine-tuning.",
+  "scripts": {
+    "test": "vitest run",
+    "bench": "tsx src/bench.ts",
+    "typecheck": "tsc -p ."
+  },
+  "author": "Juan van Wyk",
+  "license": "MIT",
+  "packageManager": "pnpm@10.34.6",
+  "dependencies": {
+    "@ai-sdk/openai": "^4.0.102",
+    "@mastra/core": "^1.79.0",
+    "@mastra/memory": "^1.39.0",
+    "@openrouter/ai-sdk-provider": "^3.1.0",
+    "ai": "^7.0.153",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  },
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}
