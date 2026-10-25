@@ -8,8 +8,9 @@ Extract fields from the invoice text. Reply with JSON only:
 
 export const REVIEWER_BASE = `ROLE: reviewer
 You review an extraction agent's mistakes on a training set and write short, general lessons it should follow next time.
+You get error counts per field and a few training examples of wrong vs expected values. Work out the general rule behind the mistakes.
 Rules: at most 2 new lessons, one line each, under 160 characters, start each with "- ".
-Do not repeat current lessons or previously rejected ones. Do not quote specific invoice values.`;
+Do not repeat current lessons or previously rejected ones. Do not quote specific invoice values; describe the rule instead.`;
 
 export function extractorInstructions(lessons: string[]): string {
   if (!lessons.length) return EXTRACTOR_BASE;

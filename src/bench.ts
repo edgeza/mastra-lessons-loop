@@ -1,15 +1,19 @@
 import { AuditLog } from './audit.js';
+import { generateDataset } from './dataset.js';
 import { runLoop } from './loop.js';
 import { pickModel } from './model.js';
 
 const { model, label, mock } = pickModel();
+// easy: original 30 invoices. hard: 10 messier layouts. house: hard + house rules.
+// Real models get the house set by default; the mock is scripted against the easy one.
+const dataset = process.env.DATASET || (mock ? 'easy' : 'house');
 const iterations = Number(process.env.ITERATIONS ?? 4);
 const auditPath = `runs/audit-${new Date().toISOString().replace(/[:.]/g, '-')}.jsonl`;
 
-console.log(`model: ${label}`);
+console.log(`model: ${label}, dataset: ${dataset}`);
 if (mock) console.log('NOTE: mock mode. Scores show the loop works end to end; they are not real model results.');
 
-const { baseline, iterations: its, cost } = await runLoop({ model, iterations, audit: new AuditLog(auditPath) });
+const { baseline, iterations: its, cost } = await runLoop({ model, iterations, audit: new AuditLog(auditPath), samples: generateDataset(30, 42, { hard: dataset !== 'easy', houseRules: dataset === 'house' }) });
 
 const pct = (n: number) => `${(n * 100).toFixed(1)}%`;
 console.log('\nHeld-out field accuracy (12 invoices, 5 fields each)');

@@ -15,7 +15,7 @@ describe('learning loop (mock model)', () => {
     expect(baseline).toBeLessThan(0.5);
     expect(iterations.at(-1)!.test).toBe(1);
     for (let i = 1; i < iterations.length; i++) expect(iterations[i]!.test).toBeGreaterThanOrEqual(iterations[i - 1]!.test);
-    expect(iterations.flatMap((r) => r.rejected)).toContain('If unsure, default the currency to USD.');
+    expect(iterations.flatMap((r) => r.rejected)).toContain('Write currencies as symbols, not codes: "EUR" becomes "€".');
     expect(cost.snapshot().inputTokens).toBeGreaterThan(0);
 
     const lines = readFileSync(path, 'utf8').trim().split('\n').map((l) => JSON.parse(l) as { step: string; seq: number });
@@ -28,5 +28,15 @@ describe('learning loop (mock model)', () => {
   it('falls back to mock when no key is set', () => {
     expect(pickModel({}).mock).toBe(true);
     expect(() => pickModel({ MOCK: '0' })).toThrow();
+  });
+
+  it('uses Claude when ANTHROPIC_API_KEY is set', () => {
+    expect(pickModel({ ANTHROPIC_API_KEY: 'test' }).label).toBe('anthropic:claude-opus-5-5');
+    expect(pickModel({ ANTHROPIC_API_KEY: 'test', MODEL: 'claude-haiku-5-5' }).label).toBe('anthropic:claude-haiku-5-5');
+    expect(pickModel({ ANTHROPIC_API_KEY: 'test', MOCK: '1' }).mock).toBe(true);
+  });
+
+  it('uses MiniMax when MINIMAX_API_KEY is set', () => {
+    expect(pickModel({ MINIMAX_API_KEY: 'test' }).label).toBe('minimax:MiniMax-M3.1-Flash');
   });
 });

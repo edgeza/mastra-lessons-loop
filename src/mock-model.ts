@@ -20,7 +20,7 @@ export const LESSON_CATALOGUE: Record<string, string[]> = {
     'Amounts use a space as thousands separator and a comma as decimal: "12 345,67" is 12345.67.',
   ],
   currency: [
-    'If unsure, default the currency to USD.', // deliberately bad, for the sceptic to reject
+    'Write currencies as symbols, not codes: "EUR" becomes "€".', // deliberately bad, for the sceptic to reject
     'Return ISO 4217 currency codes: "R" is ZAR, "US$" is USD, "EUR" is EUR.',
   ],
 };
@@ -58,7 +58,7 @@ export function mockExtract(system: string, doc: string): Record<string, unknown
   const symbol = amountLine.split(' ')[0] ?? '';
   let currency = symbol;
   if (has(system, 'ISO 4217')) currency = ({ R: 'ZAR', US$: 'USD', EUR: 'EUR' } as Record<string, string>)[symbol] ?? symbol;
-  else if (has(system, 'default the currency to USD')) currency = 'USD';
+  else if (has(system, 'as symbols, not codes')) currency = symbol === 'EUR' ? '€' : symbol;
 
   return { vendor, invoiceNumber, date, total, currency };
 }
